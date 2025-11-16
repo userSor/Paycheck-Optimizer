@@ -1,27 +1,21 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# Deploys the 'frontend' directory to GitHub Pages
+name: Deploy Frontend to Pages
 
 on:
-  # Runs on pushes to the "main" branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skip runs triggered in parallel
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just building
   deploy:
     environment:
       name: github-pages
@@ -30,22 +24,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
+          # Point the cache to the correct package-lock.json
+          cache-dependency-path: frontend/package-lock.json
+
       - name: Install dependencies
-        run: npm ci # 'ci' is a faster, cleaner version of 'install' for servers
+        # Run this command INSIDE the 'frontend' folder
+        run: npm ci
+        working-directory: ./frontend
+
       - name: Build
-        run: npm run build # This runs the "build" script from your package.json
+        # Run this command INSIDE the 'frontend' folder
+        run: npm run build
+        working-directory: ./frontend
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # This is the folder that 'npm run build' creates
-          path: './dist' 
+          # The build output is now at 'frontend/dist'
+          path: './frontend/dist'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
