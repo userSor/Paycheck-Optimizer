@@ -11,4 +11,7 @@ export default defineConfig({
     }),
   ],
   base: '/paycheck-optimizer/', 
+  build: {
+    outDir: '../docs', // Output to a 'docs' folder in the root
+  },
 })
