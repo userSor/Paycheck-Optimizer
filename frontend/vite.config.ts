@@ -10,7 +10,7 @@ export default defineConfig({
       },
     }),
   ],
-  base: '/paycheck-optimizer/', 
+  base: '/Paycheck-Optimizer/', 
   build: {
     outDir: '../docs', // Output to a 'docs' folder in the root
   },
